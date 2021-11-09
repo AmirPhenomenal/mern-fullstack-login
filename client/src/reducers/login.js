@@ -1,3 +1,4 @@
+//I HATE REDUX !!!
 import { LOGIN, LOGOUT } from '../constants/actionTypes';
 const loginReducer = (state = { authData: null }, action) => {
     switch (action.type) {

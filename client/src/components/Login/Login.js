@@ -1,12 +1,28 @@
-//Libraries
-import React, { useState } from 'react'
+//React Hooks
+import React, { useState } from 'react';
+
+//Design Elements
 import { Avatar, Button, Container, Grid, Paper, Typography } from '@material-ui/core';
-import { GoogleLogin } from 'react-google-login';
-//Assets
-import GoogleIcon from './googleIcon';
-import LockIcon from '@material-ui/icons/LockOutlined';
-import useStyles from './styles';
 import Input from './Input';
+
+//Google Login 
+import { GoogleLogin } from 'react-google-login';
+
+//Redux Dispatch ( I HATE REDUX !!! 😭)
+import { useDispatch } from 'react-redux';
+
+//React Router For Pushing To Main Route After Login
+import { useHistory } from 'react-router-dom';
+
+//Actions
+import { signup, signin } from '../../actions/login';
+
+//Icons
+import LockIcon from '@material-ui/icons/LockOutlined';
+import GoogleIcon from './googleIcon';
+
+//StyleSheet
+import useStyles from './styles';
 
 //Form Data Initial Value
 const formDataInitVal = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
@@ -22,8 +38,20 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isSignIn, setIsSignIn] = useState(true);
 
-    //Handle Actions
+    const dispatch = useDispatch();
+    const history = useHistory();
 
+    //// Handle Actions
+    //Form Submit
+    const handleSubmit = (e) => {
+        //Prevent Page Refresh
+        e.preventDefault();
+        if (isSignIn) {
+            dispatch(signin(formData, history));
+        } else {
+            dispatch(signup(formData, history));
+        }
+    }
     //Form Elements Value Change
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,12 +65,21 @@ const Login = () => {
         setIsSignIn((prevState) => !prevState);
     }
     //Google Login Events
-    const googleSuccess = (e) => {
+    const googleSuccess = async (res) => {
+        const result = res?.profileObj;
+        const token = res?.tokenId;
+        //We Do Actions Here Instead Of Actions/login.js
+        try {
+            dispatch({ type: 'AUTH', data: { result, token } });
+            history.push('/');
+        } catch (error) {
+            console.log(error);
+        }
 
     }
 
-    const googleFailure = (e) => {
-
+    const googleFailure = () => {
+        console.log("Google sign in was unsuccessful try again later");
     }
 
 
@@ -54,7 +91,7 @@ const Login = () => {
                     <Typography variant="h5" color="primary" >
                         {isSignIn ? 'Sign In' : 'Sign Up'}
                     </Typography>
-                    <form className={classes.form}>
+                    <form className={classes.form} onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             {/* Only Show If It Wasn't Sign In */}
                             {!isSignIn && (
