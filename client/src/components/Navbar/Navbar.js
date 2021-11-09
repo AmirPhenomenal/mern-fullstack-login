@@ -50,7 +50,7 @@ const Navbar = () => {
     return (
         <AppBar className={classes.appBar} position="static" color="inherit">
             <div className={classes.brandContainer}>
-                <Typography component={Link} to="/" className={classes.heading} variant="h2" align="center">WebSite</Typography>
+                <Typography component={Link} to="/" className={classes.heading} variant="h5" align="center">WebSite</Typography>
             </div>
             <Toolbar className={classes.toolbar}>
                 {/* Check If User Is Loged In */}
