@@ -68,7 +68,7 @@ const Login = () => {
     const googleSuccess = async (res) => {
         const result = res?.profileObj;
         const token = res?.tokenId;
-        //We Do Actions Here Instead Of Actions/login.js
+        //For This One We Do Actions Here Instead Of Actions/login.js
         try {
             dispatch({ type: 'AUTH', data: { result, token } });
             history.push('/');
