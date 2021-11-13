@@ -8,6 +8,9 @@ import Input from './Input';
 //Google Login 
 import { GoogleLogin } from 'react-google-login';
 
+//Jwt Decoder
+import decode from 'jwt-decode';
+
 //Redux Dispatch ( I HATE REDUX !!! 😭)
 import { useDispatch } from 'react-redux';
 
@@ -37,6 +40,7 @@ const Login = () => {
     const [formData, setFormData] = useState(formDataInitVal);
     const [showPassword, setShowPassword] = useState(false);
     const [isSignIn, setIsSignIn] = useState(true);
+    const user = localStorage.getItem('profile') ? decode(JSON.parse(localStorage.getItem('profile')).token) : "null";
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -47,6 +51,7 @@ const Login = () => {
         //Prevent Page Refresh
         e.preventDefault();
         if (isSignIn) {
+            console.log("object")
             dispatch(signin(formData, history));
         } else {
             dispatch(signup(formData, history));
@@ -81,65 +86,69 @@ const Login = () => {
     const googleFailure = () => {
         console.log("Google sign in was unsuccessful try again later");
     }
+    if (user !== "null" && user !== null) {
+        history.push('/');
+        return (null);
+    } else {
 
+        return (
+            <div>
+                <Container component="main" maxWidth="xs" >
+                    <Paper className={classes.paper} elevation={3} b>
+                        <Avatar className={classes.avatar}> <LockIcon /></Avatar>
+                        <Typography variant="h5" color="primary" >
+                            {isSignIn ? 'Sign In' : 'Sign Up'}
+                        </Typography>
+                        <form className={classes.form} onSubmit={handleSubmit}>
+                            <Grid container spacing={2}>
+                                {/* Only Show If It Wasn't Sign In */}
+                                {!isSignIn && (
+                                    <>
+                                        <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
+                                        <Input name="lastName" label="Last Name" handleChange={handleChange} half />
+                                    </>
+                                )}
 
-    return (
-        <div>
-            <Container component="main" maxWidth="xs" >
-                <Paper className={classes.paper} elevation={3} b>
-                    <Avatar className={classes.avatar}> <LockIcon /></Avatar>
-                    <Typography variant="h5" color="primary" >
-                        {isSignIn ? 'Sign In' : 'Sign Up'}
-                    </Typography>
-                    <form className={classes.form} onSubmit={handleSubmit}>
-                        <Grid container spacing={2}>
-                            {/* Only Show If It Wasn't Sign In */}
-                            {!isSignIn && (
-                                <>
-                                    <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
-                                    <Input name="lastName" label="Last Name" handleChange={handleChange} half />
-                                </>
-                            )}
-
-                            <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
-                            <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword} half={isSignIn ? false : true} />
-                            {/* Only Show If It Wasn't Sign In */}
-                            {!isSignIn && (
-                                <>
-                                    <Input name="confirmPassword" label="Confirm Password" handleChange={handleChange} type="password" half />
-                                </>
-                            )}
-                        </Grid>
-                        <Button className={classes.submit} fullWidth variant="contained" color="primary">
-                            {/* Change Text Based On Sign In/Up */}
-                            {isSignIn ? "Sign In" : "Sign Up"}
-                        </Button>
-                        {/* Google Login */}
-                        <GoogleLogin
-                            clientId={GOOGLE_CLIENT_ID}
-                            render={(renderProps) => (
-                                <Button className={classes.googleButton} color="primary" fullWidth onClick={renderProps.onClick}
-                                    disabled={renderProps.disabled} startIcon={<GoogleIcon />} variant="contained" >
-                                    Google Sign In
-                                </Button>
-                            )}
-                            onSuccess={googleSuccess}
-                            onFailure={googleFailure}
-                            cookiePolicy="single_host_origin"
-                        />
-                        <Grid container justifyContent="flex-end">
-                            <Grid item >
-                                <Button onClick={switchSignIn}>
-                                    {isSignIn ? 'Dont Have An Account ? Sign Up .' : 'Already Have An Account ? Sign In .'}
-                                </Button>
+                                <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
+                                <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword} half={isSignIn ? false : true} />
+                                {/* Only Show If It Wasn't Sign In */}
+                                {!isSignIn && (
+                                    <>
+                                        <Input name="confirmPassword" label="Confirm Password" handleChange={handleChange} type="password" half />
+                                    </>
+                                )}
                             </Grid>
-                        </Grid>
-                    </form>
-                </Paper>
-            </Container>
+                            <Button type="submit" className={classes.submit} fullWidth variant="contained" color="primary">
+                                {/* Change Text Based On Sign In/Up */}
+                                {isSignIn ? "Sign In" : "Sign Up"}
+                            </Button>
+                            {/* Google Login */}
+                            <GoogleLogin
+                                clientId={GOOGLE_CLIENT_ID}
+                                render={(renderProps) => (
+                                    <Button className={classes.googleButton} color="primary" fullWidth onClick={renderProps.onClick}
+                                        disabled={renderProps.disabled} startIcon={<GoogleIcon />} variant="contained" >
+                                        Google Sign In
+                                    </Button>
+                                )}
+                                onSuccess={googleSuccess}
+                                onFailure={googleFailure}
+                                cookiePolicy="single_host_origin"
+                            />
+                            <Grid container justifyContent="flex-end">
+                                <Grid item >
+                                    <Button onClick={switchSignIn}>
+                                        {isSignIn ? 'Dont Have An Account ? Sign Up .' : 'Already Have An Account ? Sign In .'}
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </form>
+                    </Paper>
+                </Container>
 
-        </div>
-    )
+            </div>
+        )
+    }
 }
 
 export default Login;
