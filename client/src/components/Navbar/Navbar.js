@@ -54,7 +54,7 @@ const Navbar = () => {
                 {/* Check If User Is Loged In */}
                   {(user !== "null" && user !== null) ? (
                     <div className={classes.profile}>
-                        <Avatar className={classes.purple} alt={user.name} src={user.imageUrl}>
+                        <Avatar className={classes.purple} alt={user.name} src={user.picture}>
                             {/* Show First Letter Of User Name */}
                             {user.name.charAt(0)}
                         </Avatar>

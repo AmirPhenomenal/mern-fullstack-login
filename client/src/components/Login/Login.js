@@ -75,7 +75,7 @@ const Login = () => {
         const token = res?.tokenId;
         //For This One We Do Actions Here Instead Of Actions/login.js
         try {
-            dispatch({ type: 'AUTH', data: { result, token } });
+            dispatch({ type: 'LOGIN', data: { result, token } });
             history.push('/');
         } catch (error) {
             console.log(error);
