@@ -1,14 +1,18 @@
 import express from "express";
-import { signin, signup } from "../controllers/user.js";
-
-//How To Use Middleware :
-//import auth from "../middleware/auth.js";
-//Do Actions Like This (For Example Like A Post)
-//router.post("/", auth, createPost);
+import {
+  changePassword,
+  googleLogin,
+  setPassword,
+  signin,
+  signup,
+} from "../controllers/user.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 //          Routes And Actions
 router.post("/signin", signin);
 router.post("/signup", signup);
-
+router.post("/googleLogin", googleLogin);
+router.post("/setPassword", auth, setPassword);
+router.post("/changePassword", auth, changePassword);
 export default router;

@@ -76,7 +76,7 @@ const PasswordSetting = () => {
             <Typography variant="h5" color="primary">
               Password Setting
             </Typography>
-            {user.password === "NONE" ? (
+            {user.password.startsWith("NONE") ? (
               <form sx={styles.form} onSubmit={handleSubmitSet}>
                 <Grid container spacing={2}>
                   <Typography variant="caption" color="error" sx={styles.typo}>
