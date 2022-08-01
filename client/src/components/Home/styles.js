@@ -1,6 +1,3 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { theme } from "../../themes/Default";
 
-export default makeStyles((theme) => ({
-
-
-}));
+export const styles = {};
