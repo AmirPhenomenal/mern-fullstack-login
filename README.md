@@ -39,7 +39,7 @@ npm i -g create-mern-login-starter
 ```
 ### To Create Starter Project
 ```sh
-create-mern-login-starter <Project Name>
+npx create-mern-login-starter <Project Name>
 ```
 
 <h2 align="center">What Should I Change ?</h2>
